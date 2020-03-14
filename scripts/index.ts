@@ -1,5 +1,108 @@
-function helloTest() {
-    console.log("HELLO ");
-};
 
-helloTest();
+class Town {
+    name: string;
+    countryMap: CountryMap;
+    coord: Coord;
+    routes: Route[];
+
+    constructor(name: string, countryMap: CountryMap, coord: Coord, route: Route[]) {
+        this.name = name;
+        this.countryMap = countryMap;
+        this.coord = coord;
+        this.routes = route;
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.fillRect(this.coord.x, this.coord.y, 10, 10);
+    }
+}
+
+class Route {
+    dist: number;
+    to: Town;
+    from: Town;
+
+
+    constructor(dist: number, to: Town, from: Town) {
+        this.dist = dist;
+        this.to = to;
+        this.from = from;
+    }
+
+    findTown(a: any, b: any) {
+        var obj: any ={
+            a: a,
+            b: b
+        }
+        console.log(obj.a + "::" + obj.b);
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.moveTo(this.from.coord.x, this.from.coord.y);
+        ctx.lineTo(this.to.coord.x, this.to.coord.y);
+        ctx.stroke();
+    }
+}
+
+class Coord {
+    x: number;
+    y: number;
+
+    constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class CountryMap {
+    width: number;
+    height?: number;
+    backImg?: CanvasImageSource;
+    canvas?: HTMLCanvasElement;
+    towns?: Town[];
+
+    constructor(width: number, height?: number, backImg?: CanvasImageSource, canvas?: HTMLCanvasElement, towns?: Town[]) {
+        this.width = width;
+        this.height = height;
+        this.backImg = backImg;
+        this.canvas = canvas;
+        this.towns = towns;
+    }
+
+    draw() {
+        // var canvas = document.createElement("canvas");
+        // var ctx: CanvasRenderingContext2D = canvas.getContext("2d");
+        //var reader:FileReader = new FileReader();
+    }
+}
+
+window.onload = function () {
+    var franceMap: CountryMap = new CountryMap(100);
+    franceMap.draw();
+    var divTest: HTMLDivElement = document.createElement("div");
+    var formHtml: string = `<div>
+                                <form id="myForm">
+                                    <input type="string" id="fromTown" >
+                                    <input type="string" id="toTown" >
+                                    <input type="submit" id="resInput" onclick="(fromTown.value)"value="submit">
+                                </form>
+                                <div id="chosenCityies">You chose </div>
+                            </div>`;
+    divTest.innerHTML = formHtml;
+    window.document.body.appendChild(divTest);
+}
+window.addEventListener("submit", function (e) {
+    console.log(this.document.querySelector("#fromTown")?.nodeValue);
+    e.preventDefault();
+})
+
+
+
+// window.addEventListener("onloadend", function(){
+//     console.log("ok");
+//     var franceMap: CountryMap = new CountryMap(100);
+//     franceMap.draw();
+//     var divTest: HTMLDivElement = document.createElement("div");
+//     divTest.innerHTML = `<input type="file" id="files" name="files[]" accept=".json" multiple />`
+//     window.document.body.appendChild(divTest);
+// })
