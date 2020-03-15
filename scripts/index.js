@@ -1,5 +1,6 @@
+var _a, _b;
 var divTest = document.createElement("div");
-var formHtml = "<div>\n\n                            <form id=\"myForm\">\n\n                                <input type=\"string\" id=\"fromTown\" >\n\n                                <input type=\"string\" id=\"toTown\" >\n\n                                <input type=\"submit\" id=\"resInput\" onclick=\"(fromTown.value)\"value=\"submit\">\n\n                            </form>\n\n                            <div id=\"chosenCityies\">You chose </div>\n\n                        </div> \n\n                        <div id=\"mapContainer\" style=\"width: 550px;height: 600px;position: relative;border: 2px solid black;\"></div>";
+var formHtml = "<div>\n\n                            <form id=\"myForm\">\n\n                                <input type=\"string\" id=\"fromTown\"  >\n\n                                <input type=\"string\" id=\"toTown\" >\n\n                                <input type=\"submit\" id=\"resInput\" onclick=\"(fromTown.value)\"value=\"submit\">\n\n                            </form>\n\n                            <div id=\"chosenCityies\">You chose </div>\n\n                        </div> \n\n                        <div id=\"mapContainer\" style=\"width: 550px;height: 600px;position: relative;border: 2px solid black;\"></div>";
 divTest.innerHTML = formHtml;
 var canvasMap = document.createElement("canvas");
 canvasMap.width = 550;
@@ -102,14 +103,26 @@ marseille.routes.push(between2);
 paris.routes.push(between1);
 bordeaux.routes.push(between2);
 map.towns = [marseille, paris, bordeaux];
-map.canvas = canvasMap;
 map.draw();
-// marseille.draw(ctxTowns);
-// paris.draw(ctxTowns);
-// bordeaux.draw(ctxTowns);
-//between1.draw(ctxRoads);
-// }
-// window.addEventListener("submit", function (e) {
-//     console.log(this.document.querySelector("#fromTown")?.nodeValue);
-//     e.preventDefault();
-// })
+function inputChange(event) {
+    var target = event.target;
+    var activeInput = target.value;
+    console.log(activeInput);
+}
+(_a = this.document.getElementById("#fromTown")) === null || _a === void 0 ? void 0 : _a.addEventListener("input", function (ev) {
+    var target = ev.target;
+    var activeInput = target.value;
+    console.log(target);
+});
+window.onload = function () {
+    window.addEventListener("submit", function (e) {
+        e.preventDefault();
+    });
+};
+var addFood = (_b = document.getElementById("resInput")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", function () {
+    var _a;
+    // get the values from inputs and store them in an array
+    var foodName = (_a = document.getElementById("#fromTown")) === null || _a === void 0 ? void 0 : _a.value;
+    console.log(foodName);
+    // And so on ...
+});

@@ -3,7 +3,7 @@ var formHtml: string = `<div>
 
                             <form id="myForm">
 
-                                <input type="string" id="fromTown" >
+                                <input type="string" id="fromTown"  >
 
                                 <input type="string" id="toTown" >
 
@@ -46,7 +46,7 @@ class Town {
         this.countryMap = countryMap;
         this.coord = coord;
     }
-    
+
     //WHERE ctx = ctxRoads ; FOr Each Town
     draw(ctx: CanvasRenderingContext2D | null) {
         this.routes.forEach((r) => r.draw(ctxRoads));
@@ -109,25 +109,25 @@ class CountryMap {
         this.canvas = canvas;
         this.towns = towns;
     }
-    
+
     draw() {
-            //FORM 
-            this.towns?.forEach((t) => t.draw(ctxTowns))
-            window.document.body.appendChild(divTest);
-            //Draw France
-            var ctxMap = this.canvas.getContext("2d");
-            // Draw Towns
-            this.backImg.addEventListener('load', function(){
-                ctxMap?.drawImage(this, 0, 0);
-            })
-            this.backImg.src = `https://upload.wikimedia.org/wikipedia/commons/b/b6/D%C3%A9partements_de_France-simple.svg`;
-            window.document.body.appendChild(canvasMap);
+        //FORM 
+        this.towns?.forEach((t) => t.draw(ctxTowns))
+        window.document.body.appendChild(divTest);
+        //Draw France
+        var ctxMap = this.canvas.getContext("2d");
+        // Draw Towns
+        this.backImg.addEventListener('load', function () {
+            ctxMap?.drawImage(this, 0, 0);
+        })
+        this.backImg.src = `https://upload.wikimedia.org/wikipedia/commons/b/b6/D%C3%A9partements_de_France-simple.svg`;
+        window.document.body.appendChild(canvasMap);
     }
 }
 // Hard Coded poc 
 const marseilleCo: Coord = new Coord(400, 430);
 const parisCo: Coord = new Coord(275, 125);
-const map: CountryMap = new CountryMap(550,600, imgFrance, canvasMap);
+const map: CountryMap = new CountryMap(550, 600, imgFrance, canvasMap);
 const marseille: Town = new Town("Marseille", map, marseilleCo);
 const paris: Town = new Town("Paris", map, parisCo);
 //const between1: Route = new Route(773, marseille, paris);
@@ -145,8 +145,22 @@ map.towns = [marseille, paris, bordeaux];
 
 map.draw();
 
-// }
-// window.addEventListener("submit", function (e) {
-//     console.log(this.document.querySelector("#fromTown")?.nodeValue);
-//     e.preventDefault();
-// })
+function inputChange(event: Event) {
+    const target = event.target as HTMLTextAreaElement;
+    var activeInput = target.value;
+    console.log(activeInput);
+}
+this.document.getElementById("#fromTown")?.addEventListener("input", function (ev: Event) {
+    const target = ev.target as HTMLInputElement;
+    var activeInput = target.value;
+    console.log(target);
+})
+window.onload = function () {
+    window.addEventListener("submit", function (e: Event) {
+        e.preventDefault();
+    })
+}
+let addFood = document.getElementById("resInput")?.addEventListener("click", () => {
+    let foodName = (<HTMLInputElement>document.getElementById("#fromTown"))?.value;
+    console.log(foodName);
+});
