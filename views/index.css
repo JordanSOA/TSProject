@@ -1,0 +1,7 @@
+canvas {
+    position: absolute;
+    top: 70px; 
+}
+#roadsMap { z-index: 3 }
+#townsMap { z-index: 2 }
+#countryMap { z-index: 1 }
