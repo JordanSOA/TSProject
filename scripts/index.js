@@ -1,3 +1,7 @@
+"use strict";
+exports.__esModule = true;
+var data = require("../distances/formats/aix-en-provence.json");
+console.log(data);
 var divTest = document.createElement("div");
 var formHtml = "<div>\n\n                            <form id=\"myForm\">\n\n                                <input type=\"string\" id=\"fromTown\" >\n\n                                <input type=\"string\" id=\"toTown\" >\n\n                                <input type=\"submit\" id=\"resInput\" onclick=\"(fromTown.value)\"value=\"submit\">\n\n                            </form>\n\n                            <div id=\"chosenCityies\">You chose </div>\n\n                        </div> \n\n                        <div id=\"mapContainer\" style=\"width: 550px;height: 600px;position: relative;border: 2px solid black;\"></div>";
 divTest.innerHTML = formHtml;
@@ -102,12 +106,7 @@ marseille.routes.push(between2);
 paris.routes.push(between1);
 bordeaux.routes.push(between2);
 map.towns = [marseille, paris, bordeaux];
-map.canvas = canvasMap;
 map.draw();
-// marseille.draw(ctxTowns);
-// paris.draw(ctxTowns);
-// bordeaux.draw(ctxTowns);
-//between1.draw(ctxRoads);
 // }
 // window.addEventListener("submit", function (e) {
 //     console.log(this.document.querySelector("#fromTown")?.nodeValue);

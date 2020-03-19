@@ -1,3 +1,8 @@
+
+import * as data from '../distances/formats/aix-en-provence.json';
+console.log(data);
+
+
 var divTest: HTMLDivElement = document.createElement("div");
 var formHtml: string = `<div>
 
