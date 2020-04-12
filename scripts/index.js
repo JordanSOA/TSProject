@@ -1,7 +1,8 @@
 "use strict";
-exports.__esModule = true;
-var data = require("../distances/formats/aix-en-provence.json");
-console.log(data);
+var villes = [
+    'aix-en-provence', 'ajaccio', 'amiens', 'annecy', 'besancon', 'bordeaux', 'brest', 'caen', 'calais', 'clermond-ferrand', 'dijon', 'le-havre', 'le-mans', 'lyon',
+    'marseille', 'metz', 'montpellier', 'nancy', 'nantes', 'nice', 'nimes', 'paris', 'perpignan', 'rennes', 'saint-etienne', 'toulon', 'toulouse'
+];
 var divTest = document.createElement("div");
 var formHtml = "<div>\n\n                            <form id=\"myForm\">\n\n                                <input type=\"string\" id=\"fromTown\" >\n\n                                <input type=\"string\" id=\"toTown\" >\n\n                                <input type=\"submit\" id=\"resInput\" onclick=\"(fromTown.value)\"value=\"submit\">\n\n                            </form>\n\n                            <div id=\"chosenCityies\">You chose </div>\n\n                        </div> \n\n                        <div id=\"mapContainer\" style=\"width: 550px;height: 600px;position: relative;border: 2px solid black;\"></div>";
 divTest.innerHTML = formHtml;
@@ -106,9 +107,44 @@ marseille.routes.push(between2);
 paris.routes.push(between1);
 bordeaux.routes.push(between2);
 map.towns = [marseille, paris, bordeaux];
+// DATA ACCESS
+var IDist = /** @class */ (function () {
+    function IDist() {
+    }
+    return IDist;
+}());
+var listDist = new Array();
+var roadList = new Array();
+var list = new Array();
+villes.forEach(function (ville) {
+    //Tentative XHR avec une Interface 
+    // var xhr = new XMLHttpRequest();
+    // xhr.open('GET', "http://localhost:9999/jsonByCity/" + ville + ".json");
+    // xhr.send('');
+    // xhr.onreadystatechange = function () {
+    //     if (this.readyState === 4) {
+    //         var myObj = JSON.parse(this.responseText);
+    //         myObj.forEach(element => {
+    //             //Distance from 
+    //             var dist: IDist = {
+    //                 De: element.De,
+    //                 "À": element["À"],
+    //                 Distance: parseInt(element.Distance)
+    //             }
+    //             listDist.push(dist); // List de IDist 
+    //         });
+    //     }
+    // }
+    //Tentative XHR : Mapper la data reçu en Route et les "storer"
+    // listDist.forEach(dist => roadList.push(new Route(dist.Distance, map.towns["dist.De"], map.towns["dist.À"])));
+    //Tentative Fetch : 
+    var ok = fetch("http://localhost:9999/jsonByCity/" + ville + ".json");
+    var listDeData = ok.then(function (response) { return response.json(); }).then(function (data) {
+        return {
+            "name": ville,
+            "donnees": data
+        };
+    }).then(function (obj) { return list.push(obj); }); // data = Un Array d'Objet , Storer ces objets dans une liste ? 
+});
+console.log(list); // List objet avec un name et donnees comme proprietes
 map.draw();
-// }
-// window.addEventListener("submit", function (e) {
-//     console.log(this.document.querySelector("#fromTown")?.nodeValue);
-//     e.preventDefault();
-// })

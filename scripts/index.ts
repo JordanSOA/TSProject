@@ -1,7 +1,10 @@
 
-import * as data from '../distances/formats/aix-en-provence.json';
-console.log(data);
 
+"use strict";
+let villes: any = [
+    'aix-en-provence', 'ajaccio', 'amiens', 'annecy', 'besancon', 'bordeaux', 'brest', 'caen', 'calais', 'clermond-ferrand', 'dijon', 'le-havre', 'le-mans', 'lyon',
+    'marseille', 'metz', 'montpellier', 'nancy', 'nantes', 'nice', 'nimes', 'paris', 'perpignan', 'rennes', 'saint-etienne', 'toulon', 'toulouse'
+];
 
 var divTest: HTMLDivElement = document.createElement("div");
 var formHtml: string = `<div>
@@ -51,7 +54,7 @@ class Town {
         this.countryMap = countryMap;
         this.coord = coord;
     }
-    
+
     //WHERE ctx = ctxRoads ; FOr Each Town
     draw(ctx: CanvasRenderingContext2D | null) {
         this.routes.forEach((r) => r.draw(ctxRoads));
@@ -64,7 +67,6 @@ class Route {
     dist: number;
     to: Town;
     from: Town;
-
 
     constructor(dist: number, to: Town, from: Town) {
         this.dist = dist;
@@ -114,25 +116,25 @@ class CountryMap {
         this.canvas = canvas;
         this.towns = towns;
     }
-    
+
     draw() {
-            //FORM 
-            this.towns?.forEach((t) => t.draw(ctxTowns))
-            window.document.body.appendChild(divTest);
-            //Draw France
-            var ctxMap = this.canvas.getContext("2d");
-            // Draw Towns
-            this.backImg.addEventListener('load', function(){
-                ctxMap?.drawImage(this, 0, 0);
-            })
-            this.backImg.src = `https://upload.wikimedia.org/wikipedia/commons/b/b6/D%C3%A9partements_de_France-simple.svg`;
-            window.document.body.appendChild(canvasMap);
+        //FORM 
+        this.towns?.forEach((t) => t.draw(ctxTowns))
+        window.document.body.appendChild(divTest);
+        //Draw France
+        var ctxMap = this.canvas.getContext("2d");
+        // Draw Towns
+        this.backImg.addEventListener('load', function () {
+            ctxMap?.drawImage(this, 0, 0);
+        })
+        this.backImg.src = `https://upload.wikimedia.org/wikipedia/commons/b/b6/D%C3%A9partements_de_France-simple.svg`;
+        window.document.body.appendChild(canvasMap);
     }
 }
 // Hard Coded poc 
 const marseilleCo: Coord = new Coord(400, 430);
 const parisCo: Coord = new Coord(275, 125);
-const map: CountryMap = new CountryMap(550,600, imgFrance, canvasMap);
+const map: CountryMap = new CountryMap(550, 600, imgFrance, canvasMap);
 const marseille: Town = new Town("Marseille", map, marseilleCo);
 const paris: Town = new Town("Paris", map, parisCo);
 //const between1: Route = new Route(773, marseille, paris);
@@ -148,6 +150,54 @@ bordeaux.routes.push(between2);
 
 map.towns = [marseille, paris, bordeaux];
 
+// DATA ACCESS
+class IDist {
+    De: string;
+    "À": string;
+    Distance: number;
+}
+var listDist: IDist[] = new Array();
+
+var roadList: Route[] = new Array();
+var list: Object[] = new Array();
+
+villes.forEach((ville) => {
+
+    //Tentative XHR avec une Interface 
+    // var xhr = new XMLHttpRequest();
+    // xhr.open('GET', "http://localhost:9999/jsonByCity/" + ville + ".json");
+    // xhr.send('');
+    // xhr.onreadystatechange = function () {
+    //     if (this.readyState === 4) {
+    //         var myObj = JSON.parse(this.responseText);
+    //         myObj.forEach(element => {
+    //             //Distance from 
+    //             var dist: IDist = {
+    //                 De: element.De,
+    //                 "À": element["À"],
+    //                 Distance: parseInt(element.Distance)
+    //             }
+    //             listDist.push(dist); // List de IDist 
+    //         });
+    //     }
+    // }
+    //Tentative XHR : Mapper la data reçu en Route et les "storer"
+    // listDist.forEach(dist => roadList.push(new Route(dist.Distance, map.towns["dist.De"], map.towns["dist.À"])));
+
+    //Tentative Fetch : 
+    var ok = fetch("http://localhost:9999/jsonByCity/" + ville + ".json");
+
+    var listDeData = ok.then(response => response.json()).then(data => {
+        return {
+            "name": ville,
+            "donnees": data
+        }
+    }).then(obj => list.push(obj)); // data = Un Array d'Objet , Storer ces objets dans une liste ? 
+
+
+})
+
+console.log(list); // List objet avec un name et donnees comme proprietes
 map.draw();
 
 // }
