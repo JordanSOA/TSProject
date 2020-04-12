@@ -107,44 +107,39 @@ marseille.routes.push(between2);
 paris.routes.push(between1);
 bordeaux.routes.push(between2);
 map.towns = [marseille, paris, bordeaux];
-// DATA ACCESS
-var IDist = /** @class */ (function () {
-    function IDist() {
-    }
-    return IDist;
-}());
-var listDist = new Array();
-var roadList = new Array();
-var list = new Array();
-villes.forEach(function (ville) {
-    //Tentative XHR avec une Interface 
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('GET', "http://localhost:9999/jsonByCity/" + ville + ".json");
-    // xhr.send('');
-    // xhr.onreadystatechange = function () {
-    //     if (this.readyState === 4) {
-    //         var myObj = JSON.parse(this.responseText);
-    //         myObj.forEach(element => {
-    //             //Distance from 
-    //             var dist: IDist = {
-    //                 De: element.De,
-    //                 "À": element["À"],
-    //                 Distance: parseInt(element.Distance)
-    //             }
-    //             listDist.push(dist); // List de IDist 
-    //         });
-    //     }
-    // }
-    //Tentative XHR : Mapper la data reçu en Route et les "storer"
-    // listDist.forEach(dist => roadList.push(new Route(dist.Distance, map.towns["dist.De"], map.towns["dist.À"])));
-    //Tentative Fetch : 
-    var ok = fetch("http://localhost:9999/jsonByCity/" + ville + ".json");
-    var listDeData = ok.then(function (response) { return response.json(); }).then(function (data) {
-        return {
-            "name": ville,
-            "donnees": data
-        };
-    }).then(function (obj) { return list.push(obj); }); // data = Un Array d'Objet , Storer ces objets dans une liste ? 
-});
-console.log(list); // List objet avec un name et donnees comme proprietes
 map.draw();
+var getDist = function (from, to) {
+    var dist = villes[from.toString()];
+    var distance = 0;
+    dist.forEach(function (element) {
+        var toCheck = element.À;
+        if (toCheck.toLowerCase() == to) {
+            distance = parseInt(element.Distance);
+        }
+    });
+    return distance;
+};
+window.addEventListener("load", function () {
+    var promesses = [];
+    var _loop_1 = function (ville) {
+        promesse = fetch("http://localhost:9999/jsonByCity/" + ville + ".json").then(function (data) {
+            return data.json();
+        }).then(function (json) {
+            villes[ville] = json;
+        });
+        promesses.push(promesse);
+    };
+    var promesse;
+    for (var _i = 0, villes_1 = villes; _i < villes_1.length; _i++) {
+        var ville = villes_1[_i];
+        _loop_1(ville);
+    }
+    Promise.all(promesses).then(function () {
+        var dist1 = getDist("paris", "marseille");
+        var dist2 = getDist("marseille", "bordeaux");
+        var dist3 = getDist("bordeaux", "paris");
+        console.log(dist2);
+        console.log(dist1);
+        console.log(dist3);
+    });
+});

@@ -1,6 +1,5 @@
-
-
 "use strict";
+
 let villes: any = [
     'aix-en-provence', 'ajaccio', 'amiens', 'annecy', 'besancon', 'bordeaux', 'brest', 'caen', 'calais', 'clermond-ferrand', 'dijon', 'le-havre', 'le-mans', 'lyon',
     'marseille', 'metz', 'montpellier', 'nancy', 'nantes', 'nice', 'nimes', 'paris', 'perpignan', 'rennes', 'saint-etienne', 'toulon', 'toulouse'
@@ -150,58 +149,37 @@ bordeaux.routes.push(between2);
 
 map.towns = [marseille, paris, bordeaux];
 
-// DATA ACCESS
-class IDist {
-    De: string;
-    "À": string;
-    Distance: number;
-}
-var listDist: IDist[] = new Array();
 
-var roadList: Route[] = new Array();
-var list: Object[] = new Array();
-
-villes.forEach((ville) => {
-
-    //Tentative XHR avec une Interface 
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('GET', "http://localhost:9999/jsonByCity/" + ville + ".json");
-    // xhr.send('');
-    // xhr.onreadystatechange = function () {
-    //     if (this.readyState === 4) {
-    //         var myObj = JSON.parse(this.responseText);
-    //         myObj.forEach(element => {
-    //             //Distance from 
-    //             var dist: IDist = {
-    //                 De: element.De,
-    //                 "À": element["À"],
-    //                 Distance: parseInt(element.Distance)
-    //             }
-    //             listDist.push(dist); // List de IDist 
-    //         });
-    //     }
-    // }
-    //Tentative XHR : Mapper la data reçu en Route et les "storer"
-    // listDist.forEach(dist => roadList.push(new Route(dist.Distance, map.towns["dist.De"], map.towns["dist.À"])));
-
-    //Tentative Fetch : 
-    var ok = fetch("http://localhost:9999/jsonByCity/" + ville + ".json");
-
-    var listDeData = ok.then(response => response.json()).then(data => {
-        return {
-            "name": ville,
-            "donnees": data
-        }
-    }).then(obj => list.push(obj)); // data = Un Array d'Objet , Storer ces objets dans une liste ? 
-
-
-})
-
-console.log(list); // List objet avec un name et donnees comme proprietes
 map.draw();
 
-// }
-// window.addEventListener("submit", function (e) {
-//     console.log(this.document.querySelector("#fromTown")?.nodeValue);
-//     e.preventDefault();
-// })
+const getDist = function (from: String, to: String) {
+    let dist = villes[from.toString()];
+    let distance: number = 0;
+    dist.forEach((element: { À: String; Distance: string; }) => {
+        let toCheck: String = element.À;
+        if (toCheck.toLowerCase() == to) {
+            distance = parseInt(element.Distance);
+        }
+    });
+    return distance;
+};
+window.addEventListener("load", function () {
+    let promesses = [];
+    for (let ville of villes) {
+        var promesse = fetch("http://localhost:9999/jsonByCity/" + ville + ".json").then(function (data) {
+            return data.json();
+        }).then(function (json) {
+            villes[ville] = json;
+        });
+        promesses.push(promesse);
+    }
+    Promise.all(promesses).then(function () {
+        let dist1 = getDist("paris","marseille");
+        let dist2 =  getDist("marseille","bordeaux");
+        let dist3 = getDist("bordeaux","paris");
+        console.log(dist2);
+        console.log(dist1);
+        console.log(dist3);
+    });
+
+})
